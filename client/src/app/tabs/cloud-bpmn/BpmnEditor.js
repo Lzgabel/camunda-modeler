@@ -10,7 +10,10 @@
 
 import React, { Component } from 'react';
 
-import { isFunction } from 'min-dash';
+import {
+  isFunction,
+  isUndefined
+} from 'min-dash';
 
 import { Fill } from '../../slot-fill';
 
@@ -56,6 +59,13 @@ import { DEFAULT_LAYOUT as propertiesPanelDefaultLayout } from '../PropertiesCon
 
 import { EngineProfile } from '../EngineProfile';
 
+import {
+  ENGINE_PROFILES,
+  ENGINES
+} from '../../../util/Engines';
+
+const engineProfiles = ENGINE_PROFILES.filter(({ executionPlatform }) => executionPlatform === ENGINES.CLOUD);
+
 const EXPORT_AS = [ 'png', 'jpeg', 'svg' ];
 
 const COLORS = [{
@@ -83,10 +93,6 @@ const COLORS = [{
   fill: 'rgb(225, 190, 231)',
   stroke: 'rgb(142, 36, 170)'
 }];
-
-export const engineProfile = {
-  executionPlatform: 'Camunda Cloud'
-};
 
 
 export class BpmnEditor extends CachedComponent {
@@ -227,11 +233,27 @@ export class BpmnEditor extends CachedComponent {
 
     if (error) {
       this.setCached({
+        engineProfile: null,
         lastXML: null
       });
     } else {
+      const modeler = this.getModeler(),
+            definitions = modeler.getDefinitions();
+
+      const executionPlatform = definitions.get('modeler:executionPlatform'),
+            executionPlatformVersion = definitions.get('modeler:executionPlatformVersion');
+
+      let engineProfile = null;
+
+      if (!isUndefined(executionPlatform)) {
+        engineProfile = {
+          executionPlatform,
+          executionPlatformVersion
+        };
+      }
 
       this.setCached({
+        engineProfile,
         lastXML: xml,
         stackIdx
       });
@@ -573,7 +595,29 @@ export class BpmnEditor extends CachedComponent {
     eventBus.fire('propertiesPanel.resized');
   }
 
+  setEngineProfile = (engineProfile) => {
+    const modeler = this.getModeler();
+
+    const canvas = modeler.get('canvas'),
+          modeling = modeler.get('modeling');
+
+    const definitions = modeler.getDefinitions();
+
+    const {
+      executionPlatform,
+      executionPlatformVersion
+    } = engineProfile;
+
+    modeling.updateModdleProperties(canvas.getRootElement(), definitions, {
+      'modeler:executionPlatform': executionPlatform,
+      'modeler:executionPlatformVersion': executionPlatformVersion
+    });
+
+    this.setCached({ engineProfile });
+  }
+
   render() {
+    const { engineProfile } = this.getCached();
 
     const {
       layout,
@@ -688,7 +732,11 @@ export class BpmnEditor extends CachedComponent {
           ref={ this.propertiesPanelRef }
           onLayoutChanged={ onLayoutChanged } />
 
-        <EngineProfile type="bpmn" engineProfile={ engineProfile } />
+        <EngineProfile
+          type="bpmn"
+          engineProfile={ engineProfile }
+          engineProfiles={ engineProfiles }
+          setEngineProfile={ this.setEngineProfile } />
       </div>
     );
   }
@@ -734,6 +782,7 @@ export class BpmnEditor extends CachedComponent {
       __destroy: () => {
         modeler.destroy();
       },
+      engineProfile: null,
       lastXML: null,
       modeler,
       stackIdx

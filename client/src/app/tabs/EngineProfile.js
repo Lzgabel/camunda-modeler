@@ -13,6 +13,9 @@ import classnames from 'classnames';
 
 import { isNil } from 'min-dash';
 
+import semverCompare from 'semver-compare';
+import toSemverArray from 'to-semver';
+
 import { Overlay } from '../../shared/ui';
 import { Fill } from '../slot-fill';
 
@@ -28,6 +31,7 @@ import css from './EngineProfile.less';
 export function EngineProfile(props) {
   const {
     engineProfile = null,
+    engineProfiles = ENGINE_PROFILES,
     setEngineProfile = null,
     type
   } = props;
@@ -58,13 +62,14 @@ export function EngineProfile(props) {
           anchor={ buttonRef.current }
           onClose={ () => setOpen(false) }
           engineProfile={ engineProfile }
+          engineProfiles={ engineProfiles }
           setEngineProfile={ setEngineProfile }
           type={ type }
         />
       }
       <button
         className={ classnames('btn', { 'btn--active': open }) }
-        onClick={ () => setOpen(val => !val) } ref={ buttonRef }
+        onClick={ () => setOpen(value => !value) } ref={ buttonRef }
         title={ setEngineProfile ? 'Set execution platform' : 'Display execution platform information' }
       >
         { label }
@@ -81,15 +86,21 @@ function EngineProfileOverlay(props) {
     anchor,
     onClose,
     engineProfile,
-    setEngineProfile,
-    type
+    engineProfiles,
+    setEngineProfile
   } = props;
 
   return (
     <Overlay anchor={ anchor } onClose={ onClose }>
       {
-        type === 'form'
-          ? <EngineProfileSelection engineProfile={ engineProfile } onClose={ onClose } setEngineProfile={ setEngineProfile } />
+        setEngineProfile
+          ? (
+            <EngineProfileSelection
+              engineProfile={ engineProfile }
+              engineProfiles={ engineProfiles }
+              onClose={ onClose }
+              setEngineProfile={ setEngineProfile } />
+          )
           : <EngineProfileDescription engineProfile={ engineProfile } />
       }
     </Overlay>
@@ -99,6 +110,7 @@ function EngineProfileOverlay(props) {
 function EngineProfileSelection(props) {
   const {
     engineProfile,
+    engineProfiles,
     onClose
   } = props;
 
@@ -106,7 +118,7 @@ function EngineProfileSelection(props) {
 
   const [ error, setError ] = useState(null);
 
-  const enabledEngineOptions = filterEngineOptions();
+  const enabledEngineProfiles = filterEngineProfiles(engineProfiles);
 
   const onSelectEngineProfile = (newExecutionPlatform, newExecutionPlatformVersion) => {
     const newEngineProfile = {
@@ -133,8 +145,8 @@ function EngineProfileSelection(props) {
       return;
     }
 
-    if (enabledEngineOptions.length === 1 && isEngineDisabled(selectedEngineProfile)) {
-      const allowedEngine = filterEngineOptions()[0];
+    if (enabledEngineProfiles.length === 1 && isEngineDisabled(selectedEngineProfile, engineProfiles)) {
+      const allowedEngine = filterEngineProfiles(engineProfiles)[0];
 
       props.setEngineProfile({
         executionPlatform: allowedEngine.executionPlatform,
@@ -157,13 +169,13 @@ function EngineProfileSelection(props) {
       <Overlay.Body className={ css.EngineProfileSelection }>
         <div className="form-group form-inline">
           {
-            enabledEngineOptions.map((engineProfile) => {
+            enabledEngineProfiles.map((engineProfile) => {
               return <EngineProfileOption
                 engineProfile={ engineProfile }
                 key={ engineProfile.executionPlatform }
                 onSelectEngineProfile={ onSelectEngineProfile }
                 selectedEngineProfile={ selectedEngineProfile }
-                onlyEngine={ enabledEngineOptions.length === 1 } />;
+                onlyEngine={ enabledEngineProfiles.length === 1 } />;
             })
           }
           { error && <div className="error">Select one option.</div> }
@@ -309,27 +321,27 @@ function Link(props) {
   );
 }
 
-function filterEngineOptions() {
+function filterEngineProfiles(engineProfiles) {
 
   if (!Flags.get(DISABLE_PLATFORM) && ! Flags.get(DISABLE_ZEEBE))
-    return ENGINE_PROFILES;
+    return engineProfiles;
 
-  return ENGINE_PROFILES.filter(
-    option => (
-      Flags.get(DISABLE_PLATFORM) && option.executionPlatform !== ENGINES.PLATFORM ||
-      Flags.get(DISABLE_ZEEBE) && option.executionPlatform !== ENGINES.CLOUD
+  return engineProfiles.filter(
+    engineProfile => (
+      Flags.get(DISABLE_PLATFORM) && engineProfile.executionPlatform !== ENGINES.PLATFORM ||
+      Flags.get(DISABLE_ZEEBE) && engineProfile.executionPlatform !== ENGINES.CLOUD
     ));
 }
 
-function isEngineDisabled(engineProfile) {
-  return !filterEngineOptions().includes(engineProfile);
+function isEngineDisabled(engineProfile, engineProfiles) {
+  return !filterEngineProfiles(engineProfiles).includes(engineProfile);
 }
 
 export function engineProfilesEqual(a, b) {
   return !isNil(a)
     && !isNil(b)
     && a.executionPlatform === b.executionPlatform
-    && a.executionPlatformVersion === b.executionPlatformVersion;
+    && semverCompare(toSemver(a.executionPlatformVersion), toSemver(b.executionPlatformVersion)) === 0;
 }
 
 export function isKnownEngineProfile(engineProfile = {}) {
@@ -348,4 +360,8 @@ export function isKnownEngineProfile(engineProfile = {}) {
 
 export function toKebapCase(string) {
   return string.replace(/\s/, '-').toLowerCase();
+}
+
+function toSemver(string) {
+  return toSemverArray([ string ])[ 0 ];
 }
