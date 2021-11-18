@@ -1915,11 +1915,13 @@ export class App extends PureComponent {
 
               <div className="tabs">
                 <TabLinks
-                  className="primary"
+
+                  // className="primary"
                   tabs={ tabs }
                   dirtyTabs={ dirtyTabs }
                   unsavedTabs={ unsavedTabs }
                   activeTab={ activeTab }
+                  newFileItems={ this._getNewFileDropdownItems() }
                   onSelect={ this.selectTab }
                   onMoveTab={ this.moveTab }
                   onContextMenu={ this.openTabLinksMenu }
@@ -1929,7 +1931,7 @@ export class App extends PureComponent {
                     title: 'Welcome Screen'
                   } }
                   draggable
-                  scrollable
+                  scrollable={ false }
                 />
 
                 <TabContainer className="main">

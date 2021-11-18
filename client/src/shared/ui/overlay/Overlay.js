@@ -28,7 +28,7 @@ const DEFAULT_OFFSET = {
 /**
  * @typedef {object} OverlayProps
  * @prop {Node} anchor
- * @prop {{ bottom?: number, left?: number, right?: number }} [offset={}]
+ * @prop {{ bottom?: number, left?: number, bottom?: number, right?: number }} [offset={}]
  * @prop {function} [onClose]
  *
  * @extends {PureComponent<OverlayProps>}
@@ -74,10 +74,22 @@ export class Overlay extends PureComponent {
     const bodyRect = document.body.getBoundingClientRect();
     const anchorRect = anchor.getBoundingClientRect();
 
-    const style = {
+    let style = {
       position: 'absolute',
-      bottom: Math.round(bodyRect.height - anchorRect.top + (offset.bottom || DEFAULT_OFFSET.bottom))
     };
+
+    // todo: refactor me
+    if ('top' in offset) {
+      style = {
+        ...style,
+        top: Math.round(anchorRect.top + anchorRect.height + offset.top)
+      };
+    } else {
+      style = {
+        ...style,
+        bottom: Math.round(bodyRect.height - anchorRect.top + (offset.bottom || DEFAULT_OFFSET.bottom))
+      };
+    }
 
     if ('right' in offset) {
       return {

@@ -1,9 +1,9 @@
 .tab-base() {
-  border: solid 1px var(--color-grey-225-10-75);
   position: relative;
   flex: 1;
 }
 
+// todo: add tab color variables
 :local(.TabContainer) {
   position: relative;
 
@@ -17,19 +17,71 @@
 
 :local(.LinksContainer) {
   display: flex;
-  flex: initial;
-  flex-shrink: 0;
+  justify-content: space-between;
 
   position: relative;
   z-index: 100;
 
   overflow: hidden;
 
+  flex-basis: 28px;
+  background: var(--color-grey-225-10-85);
+  border-bottom: 1px solid var(--color-grey-225-10-75);
+
   .tabs-container {
-    order: 0;
+    flex-grow: 1;
+    display: flex;
+    margin-right: 40px;
 
     white-space: nowrap;
     overflow: hidden;
+    background-color: var(--color-grey-225-10-85);
+  }
+
+  .tab-actions-container {
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    margin-right: 16px;
+
+    .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-self: center;
+      min-width: unset;
+      width: 22px;
+      height: 22px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      color: inherit;
+      background-color: inherit;
+      font-weight: normal;
+      font-size: inherit;
+      font-family: inherit;
+      
+      svg {
+        fill: var(--color-grey-225-10-35);
+      }
+
+      &:hover {
+        background-color: var(--color-grey-225-10-80);
+      }
+
+      &.btn--active {
+        background-color: var(--color-grey-225-10-75);
+  
+        svg {
+          fill: var(--color-grey-225-10-35);
+        }
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+    }
   }
 
   .scroll-tabs-button {
@@ -66,37 +118,53 @@
 
   .tab {
     position: relative;
-    display: inline-block;
-    min-width: 30px;
-    margin-right: 5px;
-    padding: 6px 9px;
-    text-align: center;
-    border: solid 1px var(--color-grey-225-10-75);
-    color: var(--color-grey-225-10-15);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 20px;
+    overflow: hidden;
+    max-width: 160px;
+    border-right: 1px solid var(--color-grey-225-10-75);
 
-    background: var(--color-white);
+    color: var(--color-grey-225-10-55);
+
     cursor: default;
-
-    position: relative;
     user-select: none;
 
-    background: var(--color-grey-225-10-97);
-
-    &:hover,
     &.active {
-      background: var(--color-white);
+      color: var(--color-grey-225-10-15);
     }
 
-    &.active:before {
-      content: '';
+    /* tab line */
+    // todo: can this be done via bottom border?
+    &.active::before,
+    &:not(.active):hover::before {
+      z-index: 3;
       position: absolute;
-      left: 0;
+      content: '';
+      left: -1px;
       right: 0;
-      z-index: 5;
+      bottom: -1px;
+      height: 2px;
+      background-color: var(--color-grey-225-10-15);
     }
 
+    &:not(.active):hover::before {
+      background-color: var(--color-grey-225-10-55);
+    }
+
+    .tab-name {
+      line-height: 26px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
+      margin: 0 4px 0 4px;
+    }
   }
 
+  // todo: can this be removed?
   &.primary {
     margin-bottom: -1px;
 
@@ -117,6 +185,7 @@
     }
   }
 
+  // todo: can this be removed?
   &.secondary {
     position: absolute;
     bottom: 0;
@@ -142,34 +211,45 @@
     }
   }
 
-  .close {
-    display: inline-block;
-    vertical-align: middle;
-    padding: 0 2px;
+  .tab-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    margin: 0 4px;
+    width: 16px;
+    height: 16px;
+  }
 
-    font-size: 18px;
-    line-height: 9px;
-    vertical-align: middle;
-    width: 13px;
+  .tab-close {
+    display: inline-flex;
+    justify-content: center;
+    justify-items: center;
+    justify-self: center;
+    margin-left: auto;
+    padding: 0 2px;
+    line-height: 26px;
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    border-radius: 50%;
 
     .icon {
-      margin-top: -1px;
+      margin: auto 0 auto -1px;
     }
 
     .close-icon {
       transform: scale(0.9);
-      fill: var(--color-grey-225-10-35);
+      fill: var(--color-grey-225-10-15);
     }
 
     &:hover {
-      .close-icon {
-        fill: var(--color-blue-205-100-45);
-      }
+      background-color: var(--color-grey-225-10-80);
     }
   }
 
 
-  .tab.dirty .close {
+  .tab.dirty .tab-close {
     .dirty-icon {
       transform: scale(0.8);
       fill: var(--color-grey-225-10-75);
@@ -181,7 +261,7 @@
 
     &:hover {
       .close-icon {
-        display: block;
+        display: inline;
       }
       
       .dirty-icon {

@@ -24,7 +24,7 @@ import css from './OverlayDropdown.less';
  * @param {{ children: React.ReactChildren, items: Item[], className?: string }} props
  */
 export function OverlayDropdown(props) {
-  const { children, className = '', items, ...restProps } = props;
+  const { children, className = '', items, offset, ...restProps } = props;
 
   const buttonRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -36,6 +36,7 @@ export function OverlayDropdown(props) {
     close();
   };
 
+  // todo: make option groups with title possible
   return (
     <React.Fragment>
       <button
@@ -48,7 +49,12 @@ export function OverlayDropdown(props) {
         { children }
       </button>
       { open && (
-        <Overlay className={ css.OverlayDropdown } onClose={ close } anchor={ buttonRef.current }>
+        <Overlay
+          className={ css.OverlayDropdown }
+          onClose={ close }
+          anchor={ buttonRef.current }
+          offset={ offset }
+        >
           <Options items={ items } onSelect={ onSelect } />
         </Overlay>
       ) }

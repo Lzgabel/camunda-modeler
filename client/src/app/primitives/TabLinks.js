@@ -15,6 +15,10 @@ import classNames from 'classnames';
 import css from './Tabbed.less';
 
 import {
+  OverlayDropdown
+} from '../../shared/ui';
+
+import {
   addScroller,
   removeScroller
 } from '../util/scroller';
@@ -29,6 +33,12 @@ import {
 
 import TabCloseIcon from '../../../resources/icons/TabClose.svg';
 import CircleIcon from '../../../resources/icons/Circle.svg';
+import PlusIcon from '../../../resources/icons/Plus.svg';
+
+// todo: use standard icons?
+import BPMNIcon from '../../../resources/icons/file-types/BPMN-16x16.svg';
+import DMNIcon from '../../../resources/icons/file-types/DMN-16x16.svg';
+import FormIcon from '../../../resources/icons/file-types/Form-16x16.svg';
 
 const noop = () => {};
 
@@ -39,6 +49,15 @@ const TABS_OPTS = {
     active: '.active',
     ignore: '.ignore'
   }
+};
+
+// todo handle this via tabs provider?
+const TABS_ICONS = {
+  'bpmn': BPMNIcon,
+  'dmn': DMNIcon,
+  'form': FormIcon,
+  'cloud-bpmn': BPMNIcon,
+  'cloud-form': FormIcon
 };
 
 
@@ -132,6 +151,7 @@ export default class TabLinks extends PureComponent {
     const {
       activeTab,
       tabs,
+      newFileItems,
       onSelect,
       onContextMenu,
       onClose,
@@ -161,10 +181,15 @@ export default class TabLinks extends PureComponent {
                   onContextMenu={ (event) => (onContextMenu || noop)(tab, event) }
                   draggable
                 >
-                  {tab.name}
+                  <span className="tab-icon">
+                    {
+                      getTabIcon(tab)
+                    }
+                  </span>
+                  <p className="tab-name">{tab.name}</p>
                   {
-                    onClose && <span
-                      className="close"
+                    onClose && (tab === activeTab) && <span
+                      className="tab-close"
                       title="Close Tab"
                       onClick={ e => {
                         e.preventDefault();
@@ -197,7 +222,30 @@ export default class TabLinks extends PureComponent {
             </span>
           }
         </div>
+
+        {/* todo: handle this as own component */}
+        <div className="tab-actions-container">
+          <OverlayDropdown
+            title="Create new ..."
+            offset={ { top: 0, right: 0 } }
+            items={ newFileItems || [] }
+          >
+            <PlusIcon />
+          </OverlayDropdown>
+        </div>
       </div>
     );
   }
+}
+
+
+// helper ///////////
+function getTabIcon(tab) {
+  const {
+    type
+  } = tab;
+
+  const TabIcon = TABS_ICONS[type] || null;
+
+  return <TabIcon />;
 }
