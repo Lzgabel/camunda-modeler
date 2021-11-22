@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "plugin:camunda-cloud/zeebe_1_2"
+  ]
+}
