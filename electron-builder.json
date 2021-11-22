@@ -34,7 +34,18 @@
   "mac": {
     "hardenedRuntime": true,
     "entitlements": "./build/entitlements.mac.inherit.plist",
-    "target": "dmg"
+    "target": "dmg",
+    "extraFiles": [
+      {
+        "from": "resources/plugins",
+        "to": "MacOS/resources/plugins",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/flags.json",
+        "to": "MacOS/resources/flags.json"
+      }
+    ]
   },
   "fileAssociations": [
     {
