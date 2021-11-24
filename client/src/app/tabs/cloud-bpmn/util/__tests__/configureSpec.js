@@ -11,7 +11,7 @@
 import configureModeler from '../configure';
 
 
-describe('tabs/bpmn/util - configure', function() {
+describe('tabs/cloud-bpmn/util - configure', function() {
 
   describe('configureModeler', function() {
 
