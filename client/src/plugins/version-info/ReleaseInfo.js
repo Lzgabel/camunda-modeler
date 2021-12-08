@@ -54,6 +54,10 @@ export function ReleaseInfo(props) {
           <h4>Keep IDs when copy and pasting elements between diagrams</h4>
           When you now copy BPMN elements between different diagrams, they will keep their original ID unless it is already used in the target diagram.
         </li>
+        <li>
+          <h4>Support completion condition for multi-instance</h4>
+          When this expression evaluates to true, all remaining instances are destroyed and the multi-instance activity ends, continuing the process.
+        </li>
       </ul>
 
     </div>
