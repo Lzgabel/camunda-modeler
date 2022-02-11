@@ -20,6 +20,17 @@
         "target": "zip",
         "arch": [ "x64", "ia32" ]
       }
+    ],
+    "extraFiles": [
+      {
+        "from": "resources/plugins",
+        "to": "MacOS/resources/plugins",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/flags.json",
+        "to": "MacOS/resources/flags.json"
+      }
     ]
   },
   "linux": {
@@ -29,12 +40,34 @@
         "target": "tar.gz",
         "arch": [ "x64" ]
       }
+    ],
+    "extraFiles": [
+      {
+        "from": "resources/plugins",
+        "to": "MacOS/resources/plugins",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/flags.json",
+        "to": "MacOS/resources/flags.json"
+      }
     ]
   },
   "mac": {
     "hardenedRuntime": true,
     "entitlements": "./build/entitlements.mac.inherit.plist",
-    "target": "dmg"
+    "target": "dmg",
+    "extraFiles": [
+      {
+        "from": "resources/plugins",
+        "to": "MacOS/resources/plugins",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/flags.json",
+        "to": "MacOS/resources/flags.json"
+      }
+    ]
   },
   "fileAssociations": [
     {
