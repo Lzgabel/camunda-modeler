@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "plugin:zeebe-lzgabel/zeebe_1_2"
+  ]
+}
