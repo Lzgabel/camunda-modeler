@@ -1,1 +1,6 @@
-{}
+{
+  "disable-platform": true,
+  "display-version": "5.24.0(lzgabel)",
+  "c8-engine-version": "8.5.0",
+  "enable-new-context-pad": true
+}
