@@ -19,6 +19,22 @@
         "target": "zip",
         "arch": [ "x64", "ia32" ]
       }
+    ],
+    "extraFiles": [
+      {
+        "from": "resources/plugins",
+        "to": "resources/plugins",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/element-templates",
+        "to": "resources/element-templates",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/flags.json",
+        "to": "resources/flags.json"
+      }
     ]
   },
   "linux": {
@@ -27,6 +43,22 @@
       {
         "target": "tar.gz",
         "arch": [ "x64" ]
+      }
+    ],
+    "extraFiles": [
+      {
+        "from": "resources/plugins",
+        "to": "resources/plugins",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/element-templates",
+        "to": "resources/element-templates",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/flags.json",
+        "to": "resources/flags.json"
       }
     ]
   },
@@ -41,6 +73,22 @@
       {
         "target": "zip",
         "arch": [ "x64", "arm64" ]
+      }
+    ],
+    "extraFiles": [
+      {
+        "from": "resources/plugins",
+        "to": "MacOS/resources/plugins",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/element-templates",
+        "to": "MacOS/resources/element-templates",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/flags.json",
+        "to": "MacOS/resources/flags.json"
       }
     ]
   },
