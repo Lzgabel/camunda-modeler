@@ -17,6 +17,7 @@ import globalClipboardModule from './features/global-clipboard';
 import handToolOnSpaceModule from './features/hand-tool-on-space';
 import propertiesPanelKeyboardBindingsModule from './features/properties-panel-keyboard-bindings';
 import lintingAnnotationsModule from '@camunda/linting/modeler';
+import BpmnColorPickerModule from '@lzgabel/bpmn-js-color-picker';
 
 import Flags, { DISABLE_ADJUST_ORIGIN } from '../../../../util/Flags';
 
@@ -62,7 +63,8 @@ const extensionModules = [
   elementTemplatesTracking,
   modelingTracking,
   popupMenuTracking,
-  paletteTracking
+  paletteTracking,
+  BpmnColorPickerModule
 ];
 
 PlatformBpmnModeler.prototype._modules = [

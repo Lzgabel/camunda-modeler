@@ -17,6 +17,7 @@ import globalClipboardModule from './features/global-clipboard';
 import handToolOnSpaceModule from '../../bpmn/modeler/features/hand-tool-on-space';
 import propertiesPanelKeyboardBindingsModule from '../../bpmn/modeler/features/properties-panel-keyboard-bindings';
 import lintingAnnotationsModule from '@camunda/linting/modeler';
+import BpmnColorPickerModule from '@lzgabel/bpmn-js-color-picker';
 
 import { BpmnJSTracking as bpmnJSTracking } from 'bpmn-js-tracking';
 
@@ -63,5 +64,6 @@ CloudBpmnModeler.prototype._modules = [
   elementTemplates,
   modelingTracking,
   popupMenuTracking,
-  paletteTracking
+  paletteTracking,
+  BpmnColorPickerModule
 ];
