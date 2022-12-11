@@ -26,6 +26,7 @@
     "@ibm/plex": "^6.0.0",
     "@sentry/browser": "^6.3.6",
     "bpmn-js": "^11.0.5",
+    "@lzgabel/bpmn-js-color-picker": "^0.5.0",
     "bpmn-js-properties-panel": "^1.12.0",
     "bpmn-moddle": "^8.0.0",
     "camunda-bpmn-js": "^0.24.1",

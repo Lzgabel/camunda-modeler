@@ -17,6 +17,8 @@ import globalClipboardModule from './features/global-clipboard';
 import handToolOnSpaceModule from '../../bpmn/modeler/features/hand-tool-on-space';
 import propertiesPanelKeyboardBindingsModule from '../../bpmn/modeler/features/properties-panel-keyboard-bindings';
 import lintingAnnotationsModule from '@camunda/linting/modeler';
+import BpmnColorPickerModule from '@lzgabel/bpmn-js-color-picker';
+
 
 import Flags, {
   DISABLE_ADJUST_ORIGIN
@@ -49,5 +51,6 @@ CloudBpmnModeler.prototype._modules = [
   globalClipboardModule,
   handToolOnSpaceModule,
   propertiesPanelKeyboardBindingsModule,
-  lintingAnnotationsModule
+  lintingAnnotationsModule,
+  BpmnColorPickerModule
 ];
