@@ -11,12 +11,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Create GitHub release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        TAG=$(git describe --tags --abbrev=0)
-        gh release create $TAG --draft --title $TAG
 
   Build_release:
     needs: Pre_release
