@@ -820,6 +820,35 @@ export class BpmnEditor extends CachedComponent {
       options,
       warnings
     } = configureModeler(getPlugins, {
+      colorPicker: {
+        colors: [
+          {
+            label: 'Default',
+            fill: undefined,
+            stroke: undefined
+          }, {
+            label: 'Blue',
+            fill: 'rgb(187, 222, 251)',
+            stroke: 'rgb(30, 136, 229)'
+          }, {
+            label: 'Orange',
+            fill: 'rgb(255, 224, 178)',
+            stroke: 'rgb(251, 140, 0)'
+          }, {
+            label: 'Green',
+            fill: 'rgb(200, 230, 201)',
+            stroke: 'rgb(67, 160, 71)'
+          }, {
+            label: 'Red',
+            fill: 'rgb(255, 205, 210)',
+            stroke: 'rgb(229, 57, 53)'
+          }, {
+            label: 'Purple',
+            fill: 'rgb(225, 190, 231)',
+            stroke: 'rgb(142, 36, 170)'
+          }
+          ]
+      },
       exporter: {
         name,
         version
